@@ -14,9 +14,16 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
     CDT::Vertex_handle vh2 = edge.first->vertex((edge.second + 2) % 3);
 
     // Check if the vertex handles are valid
-    if (!vh1->is_valid() || !vh2->is_valid())
+    if (!vh1 || !vh2)
     {
         cerr << "Invalid vertex handle detected, skipping Steiner point insertion" << endl;
+        return false; // Early exit to avoid inserting into an invalid edge
+    }
+
+    // Check for degeneracy before circumcenter calculation (εκφυλισμένη κορυφή)
+    if (CGAL::collinear(vh1->point(), vh2->point(), edge.first->vertex(edge.second)->point()))
+    {
+        cerr << "Degenerate triangle detected, skipping circumcenter calculation" << endl;
         return false; // Early exit to avoid inserting into an invalid edge
     }
 
@@ -34,7 +41,8 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
         }
     }
 
-    if (!circumcenter_exists)
+    // if (!circumcenter_exists)
+    if (cdt.locate(circumcenter) == nullptr)
     {
         // Try to insert the circumcenter
         CDT::Vertex_handle new_vertex = cdt.insert(circumcenter);
@@ -58,7 +66,8 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
         }
     }
 
-    if (!midpoint_exists)
+    // if (!midpoint_exists)
+    if (cdt.locate(midpoint) == nullptr)
     {
         CDT::Vertex_handle new_vertex = cdt.insert(midpoint);
         if (new_vertex != nullptr)
