@@ -5,7 +5,7 @@ int main()
 {
     // string file_path = "test_instances/instance_test_8.json";
     // string file_path = "instance_test_0.json";
-    string file_path = "../input.json";
+    string file_path = "../test_instances/instance_test_1.json";
     string instance_uid;
     int num__constraints = 0;
     vector<Point_2> points;
@@ -44,8 +44,8 @@ int main()
     std::string filename = "../output.json"; // Specify your desired output filename
     create_json_output(cdt, filename);
 
-    // // Visualize the triangulation
-    // CGAL::draw(cdt);
+    // Visualize the triangulation
+    // export_to_svg(cdt, "output.svg");
 
     return 0;
 }

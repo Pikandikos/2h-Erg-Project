@@ -19,11 +19,6 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Constrained_triangulation_plus_2.h>
-// #include <CGAL/Qt/Basic_viewer_qt.h>
-// #include <QtWidgets/QApplication>
-// #include <QtGui/QKeyEvent>
-// #include <QtXml/QDomElement>
-// #include <CGAL/draw_triangulation_2.h>
 
 using namespace boost::property_tree;
 
@@ -42,6 +37,8 @@ typedef CDT::Vertex_handle Vertex_handle;
 typedef CDT::Edge Edge;
 // std::unordered_set<Edge, EdgeHash, EdgeEqual> processed_edges;
 using namespace std;
+
+void export_to_svg(const CDT &cdt, const std::string &filename);
 
 // trianglulation.cpp
 CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary);

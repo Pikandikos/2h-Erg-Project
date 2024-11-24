@@ -1,6 +1,16 @@
 #include "./func.h"
 #include <iostream>
 
+#include <cmath>
+
+// Define a tolerance for comparing points
+const double epsilon = 1e-6;
+
+bool are_points_equal(const Point_2 &p1, const Point_2 &p2)
+{
+    return std::fabs(p1.x() - p2.x()) < epsilon && std::fabs(p1.y() - p2.y()) < epsilon;
+}
+
 bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
 {
     // Check if the edge is valid
@@ -13,38 +23,26 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
     CDT::Vertex_handle vh1 = edge.first->vertex((edge.second + 1) % 3);
     CDT::Vertex_handle vh2 = edge.first->vertex((edge.second + 2) % 3);
 
-    // Check if the vertex handles are valid
-    if (!vh1 || !vh2)
-    {
-        cerr << "Invalid vertex handle detected, skipping Steiner point insertion" << endl;
-        return false; // Early exit to avoid inserting into an invalid edge
-    }
+    // Circumcenter calculation
+    Point_2 circumcenter = CGAL::circumcenter(vh1->point(), vh2->point());
 
-    // Check for degeneracy before circumcenter calculation (εκφυλισμένη κορυφή)
-    if (CGAL::collinear(vh1->point(), vh2->point(), edge.first->vertex(edge.second)->point()))
-    {
-        cerr << "Degenerate triangle detected, skipping circumcenter calculation" << endl;
-        return false; // Early exit to avoid inserting into an invalid edge
-    }
-
-    // Attempt to use the circumcenter as the Steiner point
-    Point_2 circumcenter = CGAL::circumcenter(vh1->point(), vh2->point(), edge.first->vertex(edge.second)->point());
+    // Check if circumcenter exists by comparing it to existing vertices in the triangulation
     bool circumcenter_exists = false;
-
-    // Check if the circumcenter already exists as a vertex
-    for (auto vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
+    for (auto v = cdt.vertices_begin(); v != cdt.vertices_end(); ++v)
     {
-        if (vit->point() == circumcenter)
+        if (are_points_equal(v->point(), circumcenter))
         {
             circumcenter_exists = true;
             break;
         }
     }
 
-    // if (!circumcenter_exists)
-    if (cdt.locate(circumcenter) == nullptr)
+    if (circumcenter_exists)
     {
-        // Try to insert the circumcenter
+        cerr << "Circumcenter already exists, skipping insertion." << endl;
+    }
+    else
+    {
         CDT::Vertex_handle new_vertex = cdt.insert(circumcenter);
         if (new_vertex != nullptr)
         {
@@ -53,21 +51,25 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
         }
     }
 
-    // If the circumcenter could not be inserted or already exists, fallback to midpoint
+    // Midpoint calculation
     Point_2 midpoint = CGAL::midpoint(vh1->point(), vh2->point());
-    bool midpoint_exists = false;
 
-    for (auto vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
+    // Check if midpoint exists by comparing it to existing vertices in the triangulation
+    bool midpoint_exists = false;
+    for (auto v = cdt.vertices_begin(); v != cdt.vertices_end(); ++v)
     {
-        if (vit->point() == midpoint)
+        if (are_points_equal(v->point(), midpoint))
         {
             midpoint_exists = true;
             break;
         }
     }
 
-    // if (!midpoint_exists)
-    if (cdt.locate(midpoint) == nullptr)
+    if (midpoint_exists)
+    {
+        cerr << "Midpoint already exists, skipping insertion." << endl;
+    }
+    else
     {
         CDT::Vertex_handle new_vertex = cdt.insert(midpoint);
         if (new_vertex != nullptr)
@@ -80,6 +82,104 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
     std::cerr << "Both circumcenter and midpoint Steiner points already exist, skipping insertion." << std::endl;
     return false;
 }
+
+// bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge)
+// {
+//     // Check if the edge is valid
+//     if (!edge.first->is_valid())
+//     {
+//         cerr << "Invalid edge detected, skipping Steiner point insertion" << endl;
+//         return false;
+//     }
+
+//     CDT::Vertex_handle vh1 = edge.first->vertex((edge.second + 1) % 3);
+//     CDT::Vertex_handle vh2 = edge.first->vertex((edge.second + 2) % 3);
+
+//     // // Assuming edge.first is a valid face handle and you want to print its vertices
+//     // cout << "Edge first (face vertices): ";
+//     // for (int i = 0; i < 3; ++i)
+//     // {
+//     //     auto vertex_handle = edge.first->vertex(i); // Get the vertex handle
+//     //     if (vertex_handle != nullptr)
+//     //     {
+//     //         cout << "(" << vertex_handle->point().x() << ", " << vertex_handle->point().y() << ") ";
+//     //     }
+//     // }
+//     // cout << ", Edge second index: " << edge.second << endl;
+
+//     // if (vh1 != nullptr && vh2 != nullptr)
+//     // {
+//     //     cout << "Vertex handle 1: (" << vh1->point().x() << ", " << vh1->point().y() << "), "
+//     //          << "Vertex handle 2: (" << vh2->point().x() << ", " << vh2->point().y() << ")" << endl;
+//     // }
+//     // else
+//     // {
+//     //     cout << "One or both vertex handles are null." << endl;
+//     // }
+
+//     // // Check if the vertex handles are valid
+//     // if (vh1 == NULL || vh2 == NULL)
+//     // {
+//     //     cerr << "Invalid vertex handle detected, skipping Steiner point insertion" << endl;
+//     //     return false; // Early exit to avoid inserting into an invalid edge
+//     // }
+
+//     // Check for degeneracy before circumcenter calculation (εκφυλισμένη κορυφή)
+//     if (CGAL::collinear(vh1->point(), vh2->point(), edge.first->vertex(edge.second)->point()))
+//     {
+//         cerr << "Degenerate triangle detected, skipping circumcenter calculation" << endl;
+//         return false; // Early exit to avoid inserting into an invalid edge
+//     }
+
+//     // Find the Circumcenter
+//     Point_2 circumcenter = CGAL::circumcenter(vh1->point(), vh2->point());
+
+//     // Check if circumcenter exists
+//     if (cdt.locate(circumcenter) != nullptr)
+//     {
+//         cerr << "Circumcenter already exists, skipping insertion." << endl;
+//         cerr << "Skipping insertion for edge with vertices: ("
+//              << vh1->point() << ") and (" << vh2->point() << ") ";
+//         cerr << "Triangle vertices: (" << edge.first->vertex(0)->point() << "), "
+//              << "(" << edge.first->vertex(1)->point() << "), "
+//              << "(" << edge.first->vertex(2)->point() << ")" << endl;
+//     }
+//     else
+//     {
+//         CDT::Vertex_handle new_vertex = cdt.insert(circumcenter);
+//         if (new_vertex != nullptr)
+//         {
+//             cout << "Steiner Point (circumcenter) added: (" << circumcenter.x() << ", " << circumcenter.y() << ")" << endl;
+//             return true;
+//         }
+//     }
+
+//     // Find the Midpoint
+//     Point_2 midpoint = CGAL::midpoint(vh1->point(), vh2->point());
+
+//     // Check if midpoint exists
+//     if (cdt.locate(midpoint) != nullptr)
+//     {
+//         cerr << "Midpoint already exists, skipping insertion." << endl;
+//         cerr << "Skipping insertion for edge with vertices: ("
+//              << vh1->point() << ") and (" << vh2->point() << ") ";
+//         cerr << "Triangle vertices: (" << edge.first->vertex(0)->point() << "), "
+//              << "(" << edge.first->vertex(1)->point() << "), "
+//              << "(" << edge.first->vertex(2)->point() << ")" << endl;
+//     }
+//     else
+//     {
+//         CDT::Vertex_handle new_vertex = cdt.insert(midpoint);
+//         if (new_vertex != nullptr)
+//         {
+//             cout << "Steiner Point (midpoint) added: (" << midpoint.x() << ", " << midpoint.y() << ")" << endl;
+//             return true;
+//         }
+//     }
+
+//     std::cerr << "Both circumcenter and midpoint Steiner points already exist, skipping insertion." << std::endl;
+//     return false;
+// }
 
 bool attempt_to_flip(CDT &cdt, CDT::Finite_faces_iterator face_it, CDT::Edge edge)
 {
@@ -164,6 +264,8 @@ CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary)
 
     while (!all_acute)
     {
+        // Visualize the triangulation
+        export_to_svg(cdt, "output.svg");
         all_acute = true; // υποθετω ολα τα τριγωνα οξυγωνια
         cout << endl
              << "Starting to check angles... again" << endl;
