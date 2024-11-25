@@ -1,0 +1,130 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="500" height="325">
+<line x1="150.049" y1="175" x2="0" y2="25" style="stroke:black;stroke-width:1" />
+<line x1="150" y1="175" x2="150.049" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="100" y1="175" x2="0" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="250" x2="500" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="500" y1="100" x2="400" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="150" y1="293.75" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="325" x2="193.75" y2="287.5" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="25" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="200" y1="100" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="500" y1="100" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="500" y1="100" x2="300" y2="25" style="stroke:black;stroke-width:1" />
+<line x1="250" y1="212.5" x2="151.562" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="151.562" y1="175" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="325" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="400" y1="100" x2="300" y2="25" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="25" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="250" y1="212.5" x2="400" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="200" y1="100" x2="150.049" y2="24.9512" style="stroke:black;stroke-width:1" />
+<line x1="150.049" y1="24.9512" x2="0" y2="25" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="175" x2="0" y2="25" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="100" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="100" y1="175" x2="150" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150" y1="175" x2="0" y2="25" style="stroke:black;stroke-width:1" />
+<line x1="200" y1="175" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="200" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="325" x2="300" y2="250" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="250" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="250" x2="400" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="150" y1="293.75" x2="193.75" y2="287.5" style="stroke:black;stroke-width:1" />
+<line x1="193.75" y1="287.5" x2="100" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="100" y1="175" x2="150" y2="293.75" style="stroke:black;stroke-width:1" />
+<line x1="150" y1="293.75" x2="0" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="100" y1="175" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="325" x2="150" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="175" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="175" y1="175" x2="200" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="175" y1="0" x2="300" y2="25" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="175" y2="0" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="162.5" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="162.5" y1="175" x2="175" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="175" y1="175" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="250" y1="212.5" x2="200" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="162.5" y1="12.5" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="200" y1="100" x2="175" y2="0" style="stroke:black;stroke-width:1" />
+<line x1="175" y1="0" x2="162.5" y2="12.5" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="162.5" y2="12.5" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="156.25" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="156.25" y1="175" x2="162.5" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="162.5" y1="175" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="156.25" y1="18.75" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="162.5" y1="12.5" x2="156.25" y2="18.75" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="156.25" y2="18.75" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="153.125" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="153.125" y1="175" x2="156.25" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="156.25" y1="175" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="153.125" y1="21.875" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="156.25" y1="18.75" x2="153.125" y2="21.875" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="153.125" y2="21.875" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="151.562" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="151.562" y1="175" x2="153.125" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="153.125" y1="175" x2="250" y2="212.5" style="stroke:black;stroke-width:1" />
+<line x1="151.562" y1="23.4375" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="153.125" y1="21.875" x2="151.562" y2="23.4375" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="151.562" y2="23.4375" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.781" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.781" y1="175" x2="151.562" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.781" y1="24.2188" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="151.562" y1="23.4375" x2="150.781" y2="24.2188" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.781" y2="24.2188" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.391" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.391" y1="175" x2="150.781" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.781" y1="175" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="150.391" y1="24.6094" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="150.781" y1="24.2188" x2="150.391" y2="24.6094" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.391" y2="24.6094" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.195" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.195" y1="175" x2="150.391" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.391" y1="175" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="150.195" y1="24.8047" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="150.391" y1="24.6094" x2="150.195" y2="24.8047" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.195" y2="24.8047" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.098" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.098" y1="175" x2="150.195" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.195" y1="175" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="150.098" y1="24.9023" x2="200" y2="100" style="stroke:black;stroke-width:1" />
+<line x1="150.195" y1="24.8047" x2="150.098" y2="24.9023" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="25" x2="150.098" y2="24.9023" style="stroke:black;stroke-width:1" />
+<line x1="150.049" y1="175" x2="150.098" y2="175" style="stroke:black;stroke-width:1" />
+<line x1="150.098" y1="175" x2="300" y2="325" style="stroke:black;stroke-width:1" />
+<line x1="150.098" y1="24.9023" x2="150.049" y2="24.9512" style="stroke:black;stroke-width:1" />
+<line x1="300" y1="325" x2="150.049" y2="175" style="stroke:black;stroke-width:1" />
+<circle cx="0" cy="175" r="3" fill="red" />
+<circle cx="100" cy="175" r="3" fill="red" />
+<circle cx="300" cy="325" r="3" fill="red" />
+<circle cx="300" cy="250" r="3" fill="red" />
+<circle cx="500" cy="100" r="3" fill="red" />
+<circle cx="400" cy="100" r="3" fill="red" />
+<circle cx="300" cy="25" r="3" fill="red" />
+<circle cx="200" cy="100" r="3" fill="red" />
+<circle cx="200" cy="175" r="3" fill="red" />
+<circle cx="0" cy="25" r="3" fill="red" />
+<circle cx="193.75" cy="287.5" r="3" fill="red" />
+<circle cx="250" cy="212.5" r="3" fill="red" />
+<circle cx="150" cy="293.75" r="3" fill="red" />
+<circle cx="150" cy="175" r="3" fill="red" />
+<circle cx="175" cy="0" r="3" fill="red" />
+<circle cx="175" cy="175" r="3" fill="red" />
+<circle cx="162.5" cy="12.5" r="3" fill="red" />
+<circle cx="162.5" cy="175" r="3" fill="red" />
+<circle cx="156.25" cy="18.75" r="3" fill="red" />
+<circle cx="156.25" cy="175" r="3" fill="red" />
+<circle cx="153.125" cy="21.875" r="3" fill="red" />
+<circle cx="153.125" cy="175" r="3" fill="red" />
+<circle cx="151.562" cy="23.4375" r="3" fill="red" />
+<circle cx="151.562" cy="175" r="3" fill="red" />
+<circle cx="150.781" cy="24.2188" r="3" fill="red" />
+<circle cx="150.781" cy="175" r="3" fill="red" />
+<circle cx="150.391" cy="24.6094" r="3" fill="red" />
+<circle cx="150.391" cy="175" r="3" fill="red" />
+<circle cx="150.195" cy="24.8047" r="3" fill="red" />
+<circle cx="150.195" cy="175" r="3" fill="red" />
+<circle cx="150.098" cy="24.9023" r="3" fill="red" />
+<circle cx="150.098" cy="175" r="3" fill="red" />
+<circle cx="150.049" cy="24.9512" r="3" fill="red" />
+<circle cx="150.049" cy="175" r="3" fill="red" />
+</svg>

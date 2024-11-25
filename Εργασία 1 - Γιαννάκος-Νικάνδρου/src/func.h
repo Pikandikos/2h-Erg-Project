@@ -38,6 +38,9 @@ typedef CDT::Edge Edge;
 // std::unordered_set<Edge, EdgeHash, EdgeEqual> processed_edges;
 using namespace std;
 
+const int MAX_NO__STEINER_POINTS = 25;
+
+// export.cpp
 void export_to_svg(const CDT &cdt, const std::string &filename);
 
 // trianglulation.cpp
@@ -48,6 +51,8 @@ bool attempt_to_flip(CDT &cdt, CDT::Finite_faces_iterator face_it, CDT::Edge edg
 // common.cpp
 double angle_between_points(const Point_2 &p1, const Point_2 &p2, const Point_2 &p3);
 void check_cdt_validity(const CDT &cdt);
+// Point_2 compute_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it);
+// bool add_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it);
 
 // io.c
 bool read_json_file(const string &file_path, string &instance_uid, vector<Point_2> &points, vector<int> &region_boundary, int &num_constraints, vector<pair<int, int>> &additional_constraints);

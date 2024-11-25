@@ -34,3 +34,40 @@ void check_cdt_validity(const CDT &cdt)
     // cout << "All Faces valid for now..." << endl;
     return;
 }
+
+// Point_2 compute_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it)
+// {
+//     std::vector<Point_2> neighbors_polygon;
+
+//     // Iterate over neighboring faces and collect their vertices
+//     for (auto edge : cdt.finite_edges_of(face_it))
+//     {
+//         CDT::Face_iterator neighbor_face = edge.second; // Get neighboring face
+//         if (neighbor_face != face_it)
+//         {
+//             // Collect vertices that form the boundary of the polygon
+//             Point_2 neighbor_vertex = edge.first->get_opposite_vertex(face_it);
+//             neighbors_polygon.push_back(neighbor_vertex);
+//         }
+//     }
+
+//     // Find a suitable Steiner point inside the polygon (e.g., centroid)
+//     Point_2 steiner_point = compute_centroid(neighbors_polygon);
+
+//     return steiner_point;
+// }
+
+// bool add_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it)
+// {
+//     // Get a Steiner point using the neighboring faces
+//     Point_2 steiner_point = compute_steiner_point_from_neighbors(cdt, face_it);
+
+//     // Check if the point is valid (e.g., inside the convex hull of neighbors)
+//     if (is_valid_steiner_point(cdt, steiner_point))
+//     {
+//         // Insert the Steiner point into the triangulation
+//         cdt.insert(steiner_point);
+//         return true;
+//     }
+//     return false;
+// }
