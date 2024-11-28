@@ -5,7 +5,7 @@ int main()
 {
     // string file_path = "test_instances/instance_test_8.json";
     // string file_path = "instance_test_0.json";
-    string file_path = "../test_instances/instance_test_1.json";
+    string file_path = "../test_instances/instance_test_21.json";
     string instance_uid;
     int num__constraints = 0;
     vector<Point_2> points;
@@ -41,11 +41,14 @@ int main()
     cdt = triangulation(points, region_boundary);
     cout << "Went Well...." << endl;
 
+    // Analyze obtuse angles in the triangulation
+    analyze_obtuse_angles(cdt);
+
     std::string filename = "../output.json"; // Specify your desired output filename
     create_json_output(cdt, filename);
 
     // Visualize the triangulation
-    // export_to_svg(cdt, "output.svg");
+    export_to_svg(cdt, "output.svg");
 
     return 0;
 }
