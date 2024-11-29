@@ -5,7 +5,7 @@ int main()
 {
     // string file_path = "test_instances/instance_test_8.json";
     // string file_path = "instance_test_0.json";
-    string file_path = "../test_instances/instance_test_21.json";
+    string file_path = "../test_instances/instance_test_10.json";
     string instance_uid;
     int num__constraints = 0;
     vector<Point_2> points;
@@ -38,7 +38,7 @@ int main()
 
     cout << "Commencing Triangulation" << endl;
     CDT cdt;
-    cdt = triangulation(points, region_boundary);
+    cdt = triangulation(points, region_boundary, additional_constraints);
     cout << "Went Well...." << endl;
 
     // Analyze obtuse angles in the triangulation

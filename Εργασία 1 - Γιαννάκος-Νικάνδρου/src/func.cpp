@@ -175,7 +175,7 @@ bool attempt_to_flip(CDT &cdt, CDT::Finite_faces_iterator face_it, CDT::Edge edg
     }
 }
 
-CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary)
+CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary, const vector<pair<int, int>> &additional_constraints)
 {
     // τριγωνοποίηση Delaunay
     CDT cdt;
@@ -184,21 +184,48 @@ CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary)
     vector<std::pair<Point_2, Point_2>> constraints;
 
     // προσθήκη περιορισμένων ακμών (PSLG)
-    for (std::size_t i = 0; i < region_boundary.size() - 1; i++ /*i += 2*/)
-    { // ζεύγος δεικτών αναπαριστουν ακμή, ορια περιοχης που θα τριγωνοποιηθει
+    // Ensure region boundary constraints are added in CCW order
+    for (std::size_t i = 0; i < region_boundary.size() - 1; ++i)
+    {
         Point_2 p1 = points[region_boundary[i]];
         Point_2 p2 = points[region_boundary[i + 1]];
-        cdt.insert_constraint(points[region_boundary[i]], points[region_boundary[i + 1]]);
-        constraints.push_back({p1, p2}); // Store the constraint for later use
+        cdt.insert_constraint(p1, p2);
+        constraints.push_back({p1, p2}); // Store the region boundary constraint
+    }
+
+    // Close the loop for region_boundary if needed
+    if (region_boundary.size() > 2)
+    {
+        Point_2 p1 = points[region_boundary.back()];
+        Point_2 p2 = points[region_boundary.front()];
+        cdt.insert_constraint(p1, p2);
+        constraints.push_back({p1, p2}); // Store the closing constraint
+    }
+
+    // Add additional constraints
+    for (const auto &constraint : additional_constraints)
+    {
+        Point_2 p1 = points[constraint.first];
+        Point_2 p2 = points[constraint.second];
+        cdt.insert_constraint(p1, p2);
+        constraints.push_back({p1, p2}); // Store the additional constraint
     }
 
     check_cdt_validity(cdt);
 
-    // προσθήκη σημείων από τον vector points
+    // προσθήκη σημείων από τον vector points με έλεγχο των constraints
     for (const auto &point : points)
     {
-        cdt.insert(point); // εισαγωγή σημείου στην τριγωνοποίηση
-        check_cdt_validity(cdt);
+        // Check if the point is inside the constraints
+        if (is_point_inside_constraints(point, constraints))
+        {
+            cdt.insert(point); // εισαγωγή σημείου στην τριγωνοποίηση
+            check_cdt_validity(cdt);
+        }
+        else
+        {
+            std::cerr << "Point (" << point.x() << ", " << point.y() << ") is outside constraints and will be skipped.\n";
+        }
     }
 
     // επανάληψη για προσθήκη σημείων Steiner αν υπάρχουν αμβλυγώνια τρίγωνα

@@ -40,13 +40,13 @@ typedef CGAL::Polygon_2<Kernel> Polygon_2;
 // std::unordered_set<Edge, EdgeHash, EdgeEqual> processed_edges;
 using namespace std;
 
-const int MAX_NO__STEINER_POINTS = 35;
+const int MAX_NO__STEINER_POINTS = 30;
 
 // export.cpp
 void export_to_svg(const CDT &cdt, const std::string &filename);
 
 // trianglulation.cpp
-CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary);
+CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary, const vector<pair<int, int>> &additional_constraints);
 bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge, const vector<pair<Point_2, Point_2>> &constraints);
 bool attempt_to_flip(CDT &cdt, CDT::Finite_faces_iterator face_it, CDT::Edge edge);
 
