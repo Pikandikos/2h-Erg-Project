@@ -1,8 +1,7 @@
 #include "./func.h"
 #include <iostream>
 
-// Reads the json folder given in the file path and distributes it to the vectors
-bool read_json_file(const string &file_path, string &instance_uid, vector<Point_2> &points, vector<int> &region_boundary, int &num_constraints, vector<pair<int, int>> &additional_constraints)
+bool read_json_file(const string &file_path, string &instance_uid, vector<Point_2> &points, vector<int> &region_boundary, int &num_constraints, vector<pair<int, int>> &additional_constraints, string &method, ptree &parameters, bool &delaunay)
 {
     ptree pt;
     try
@@ -43,6 +42,11 @@ bool read_json_file(const string &file_path, string &instance_uid, vector<Point_
         auto second = constraint.second.back().second.get_value<int>();
         additional_constraints.emplace_back(first, second);
     }
+
+    num_constraints = pt.get<int>("num_constraints");
+    method = pt.get<string>("method");
+    parameters = pt.get_child("parameters");
+    delaunay = pt.get<bool>("delaunay");
 
     return true;
 }

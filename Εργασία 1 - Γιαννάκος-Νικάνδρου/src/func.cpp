@@ -1,8 +1,10 @@
 #include "./func.h"
 #include <iostream>
 
-bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge, const vector<pair<Point_2, Point_2>> &constraints)
+bool add_steiner_point_local_search(CDT &cdt, const CDT::Edge &edge, const vector<pair<Point_2, Point_2>> &constraints)
 {
+    vector<Point_2> contender;
+
     // Check if the edge is valid
     if (!edge.first->is_valid())
     {
@@ -20,31 +22,6 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge, const vector<pai
         return false; // Early exit
     }
 
-    // // Compute the Steiner point from the neighboring faces
-    // Point_2 polygon_st = compute_steiner_point_from_neighbors(cdt, *edge.first);
-
-    // // Check if the computed Steiner point already exists in the triangulation
-    // bool polygon_st_exists = false;
-    // for (auto vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
-    // {
-    //     if (vit->point() == polygon_st)
-    //     {
-    //         polygon_st_exists = true;
-    //         break;
-    //     }
-    // }
-
-    // if (!polygon_st_exists)
-    // {
-    //     // Insert the Steiner point from neighboring faces
-    //     CDT::Vertex_handle new_vertex = cdt.insert(polygon_st);
-    //     if (new_vertex != nullptr)
-    //     {
-    //         cout << "Steiner Point (from neighbors) added: (" << polygon_st.x() << ", " << polygon_st.y() << ")" << endl;
-    //         return true;
-    //     }
-    // }
-
     // Check for degeneracy before circumcenter calculation (εκφυλισμένη κορυφή)
     if (CGAL::collinear(vh1->point(), vh2->point(), edge.first->vertex(edge.second)->point()))
     {
@@ -54,69 +31,45 @@ bool add_steiner_point_on_edge(CDT &cdt, const CDT::Edge &edge, const vector<pai
 
     // Attempt to use the circumcenter as the Steiner point
     Point_2 circumcenter = CGAL::circumcenter(vh1->point(), vh2->point(), edge.first->vertex(edge.second)->point());
-    bool circumcenter_not_inside = false;
-    bool circumcenter_exists = false;
-
-    // Validate if the circumcenter is within constraints
-    if (!is_point_inside_constraints(circumcenter, constraints))
-    {
-        std::cerr << "Circumcenter is outside the constraints, skipping insertion." << endl;
-        circumcenter_not_inside = false;
-    }
-
-    // Check if the circumcenter already exists as a vertex
-    for (auto vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
-    {
-        if (vit->point() == circumcenter)
-        {
-            circumcenter_exists = true;
-            break;
-        }
-    }
-
-    if (!(circumcenter_exists || circumcenter_not_inside))
-    {
-        // Try to insert the circumcenter
-        CDT::Vertex_handle new_vertex = cdt.insert(circumcenter);
-        if (new_vertex != nullptr)
-        {
-            cout << "Steiner Point (circumcenter) added: (" << circumcenter.x() << ", " << circumcenter.y() << ")" << endl;
-            return true;
-        }
-    }
-
-    // If the circumcenter could not be inserted or already exists, fallback to midpoint
+    contender.push_back(circumcenter);
+    // Midpoint of the longest Edge
     Point_2 midpoint = CGAL::midpoint(vh1->point(), vh2->point());
-    bool midpoint_not_inside = false;
-    bool midpoint_exists = false;
+    contender.push_back(midpoint);
+    // Projection of the obtuse vertex onto the opposite edge
+    Point_2 projection = CGAL::projection(CGAL::Segment_2(vh1->point(), vh2->point()), obtuse_vertex);
+    contender.push_back(projection);
+    // Centroid of the triangle
+    Point_2 centroid = CGAL::centroid(vh1->point(), vh2->point(), obtuse_vertex);
+    contender.push_back(centroid);
+    // Mean point of adjacent obtuse triangles
+    Point_2 mean_point_of_adjacent_triangles = mean_point_of_adjacent_triangles(cdt, edge.first, constraints);
+    contender.push_back(mean_point_of_adjacent_triangles);
 
-    // Validate if the circumcenter is within constraints
-    if (!is_point_inside_constraints(midpoint, constraints))
+    for (int i = 0; i < 5; i++)
     {
-        std::cerr << "Midpoint is outside the constraints too, skipping insertion." << endl;
-        midpoint_not_inside = true;
-    }
+        bool not_inside = false;
+        bool already_exists = false;
 
-    for (auto vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
-    {
-        if (vit->point() == midpoint)
+        // Validate if the point is within constraints
+        if (!is_point_inside_constraints(contender[i], constraints))
         {
-            midpoint_exists = true;
-            break;
+            std::cerr << "Point is outside the constraints." << endl;
+            not_inside = false;
+        }
+
+        // Check if the point already exists as a vertex
+        for (auto vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
+        {
+            if (vit->point() == contender[i])
+            {
+                std::cerr << "Point is already exists in CDT." << endl;
+                already_exists = true;
+                break;
+            }
         }
     }
 
-    if (!(midpoint_exists || midpoint_not_inside))
-    {
-        CDT::Vertex_handle new_vertex = cdt.insert(midpoint);
-        if (new_vertex != nullptr)
-        {
-            cout << "Steiner Point (midpoint) added: (" << midpoint.x() << ", " << midpoint.y() << ")" << endl;
-            return true;
-        }
-    }
-
-    std::cerr << "Both circumcenter and midpoint Steiner points already exist, skipping insertion." << std::endl;
+    std::cerr << "No Steiner points found that were valid, skipping insertion." << std::endl;
     return false;
 }
 
@@ -295,7 +248,7 @@ CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary, const v
             {
                 all_acute = false;
                 bool flipped = false;
-                steiner_point_inserted = add_steiner_point_on_edge(cdt, CDT::Edge(face_it, 0), constraints);
+                steiner_point_inserted = add_steiner_point_local_search(cdt, CDT::Edge(face_it, 0), constraints);
                 if (steiner_point_inserted) // steiner point hasn't been skipped
                 {
                     no_of_steiner_points_added++;
@@ -309,7 +262,7 @@ CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary, const v
             {
                 all_acute = false;
                 bool flipped = false;
-                steiner_point_inserted = add_steiner_point_on_edge(cdt, CDT::Edge(face_it, 1), constraints);
+                steiner_point_inserted = add_steiner_point_local_search(cdt, CDT::Edge(face_it, 2), constraints);
                 if (steiner_point_inserted) // steiner point hasn't been skipped
                 {
                     no_of_steiner_points_added++;
@@ -323,7 +276,7 @@ CDT triangulation(vector<Point_2> &points, vector<int> &region_boundary, const v
             {
                 all_acute = false;
                 bool flipped = false;
-                steiner_point_inserted = add_steiner_point_on_edge(cdt, CDT::Edge(face_it, 2), constraints);
+                steiner_point_inserted = add_steiner_point_local_search(cdt, CDT::Edge(face_it, 1), constraints);
                 if (steiner_point_inserted) // steiner point hasn't been skipped
                 {
                     no_of_steiner_points_added++;

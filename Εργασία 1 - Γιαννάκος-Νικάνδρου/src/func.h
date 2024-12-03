@@ -19,6 +19,8 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Constrained_triangulation_plus_2.h>
+#include <CGAL/centroid.h>
+#include <CGAL/Kernel/global_functions.h>
 
 using namespace boost::property_tree;
 
@@ -37,10 +39,9 @@ typedef CDT::Vertex_handle Vertex_handle;
 typedef CDT::Edge Edge;
 typedef CGAL::Polygon_2<Kernel> Polygon_2;
 
-// std::unordered_set<Edge, EdgeHash, EdgeEqual> processed_edges;
 using namespace std;
 
-const int MAX_NO__STEINER_POINTS = 30;
+const int MAX_NO__STEINER_POINTS = 1;
 
 // export.cpp
 void export_to_svg(const CDT &cdt, const std::string &filename);
@@ -54,12 +55,12 @@ bool attempt_to_flip(CDT &cdt, CDT::Finite_faces_iterator face_it, CDT::Edge edg
 double angle_between_points(const Point_2 &p1, const Point_2 &p2, const Point_2 &p3);
 void check_cdt_validity(const CDT &cdt);
 bool is_point_inside_constraints(const Point_2 &point, const vector<pair<Point_2, Point_2>> &constraints);
-// Point_2 compute_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it);
-// bool add_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it);
 void analyze_obtuse_angles(const CDT &cdt);
+Point_2 mean_point_of_adjacent_triangles(CDT &cdt, CDT::Face_handle face, const vector<pair<Point_2, Point_2>> &constraints);
 
 // io.c
-bool read_json_file(const string &file_path, string &instance_uid, vector<Point_2> &points, vector<int> &region_boundary, int &num_constraints, vector<pair<int, int>> &additional_constraints);
+bool read_json_file(const string &file_path, string &instance_uid, vector<Point_2> &points, vector<int> &region_boundary, int &num_constraints, vector<pair<int, int>> &additional_constraints,
+                    string &method, ptree &parameters, bool &delaunay);
 void create_json_output(const CDT &cdt, const std::string &filename);
 
 #endif
