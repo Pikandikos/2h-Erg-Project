@@ -3,7 +3,8 @@
 
 bool add_steiner_point_local_search(CDT &cdt, const CDT::Edge &edge, const vector<pair<Point_2, Point_2>> &constraints)
 {
-    vector<Point_2> contender;
+    std::vector<Point_2> contender;
+    Point_2 best_steiner_point;
 
     // Check if the edge is valid
     if (!edge.first->is_valid())
@@ -36,16 +37,16 @@ bool add_steiner_point_local_search(CDT &cdt, const CDT::Edge &edge, const vecto
     Point_2 midpoint = CGAL::midpoint(vh1->point(), vh2->point());
     contender.push_back(midpoint);
     // Projection of the obtuse vertex onto the opposite edge
-    Point_2 projection = CGAL::projection(CGAL::Segment_2(vh1->point(), vh2->point()), obtuse_vertex);
+    Point_2 projection = project_point_on_segment(edge.first->vertex(edge.second)->point(), CGAL::Segment_2<Kernel>(vh1->point(), vh2->point()));
     contender.push_back(projection);
     // Centroid of the triangle
-    Point_2 centroid = CGAL::centroid(vh1->point(), vh2->point(), obtuse_vertex);
+    Point_2 centroid = CGAL::centroid(vh1->point(), vh2->point(), edge.first->vertex(edge.second)->point());
     contender.push_back(centroid);
     // Mean point of adjacent obtuse triangles
-    Point_2 mean_point_of_adjacent_triangles = mean_point_of_adjacent_triangles(cdt, edge.first, constraints);
-    contender.push_back(mean_point_of_adjacent_triangles);
+    Point_2 mean_point = mean_point_of_adjacent_triangles(cdt, edge.first, constraints);
+    contender.push_back(mean_point);
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < contender.size(); i++)
     {
         bool not_inside = false;
         bool already_exists = false;
@@ -54,7 +55,7 @@ bool add_steiner_point_local_search(CDT &cdt, const CDT::Edge &edge, const vecto
         if (!is_point_inside_constraints(contender[i], constraints))
         {
             std::cerr << "Point is outside the constraints." << endl;
-            not_inside = false;
+            not_inside = true;
         }
 
         // Check if the point already exists as a vertex
@@ -62,11 +63,24 @@ bool add_steiner_point_local_search(CDT &cdt, const CDT::Edge &edge, const vecto
         {
             if (vit->point() == contender[i])
             {
-                std::cerr << "Point is already exists in CDT." << endl;
+                std::cerr << "Point already exists in CDT." << endl;
                 already_exists = true;
                 break;
             }
         }
+
+        if (!(already_exists || not_inside))
+        {
+            // ....
+            CDT::Vertex_handle new_vertex = cdt.insert(contender[i]);
+            if (new_vertex != nullptr)
+            {
+                cout << "Steiner Point  added: (" << contender[i].x() << ", " << contender[i].y() << ")" << endl;
+                return true;
+            }
+        }
+        else
+            ls_remove_case(contender, i); // Removes Steiner point from Table if previous checks fail
     }
 
     std::cerr << "No Steiner points found that were valid, skipping insertion." << std::endl;

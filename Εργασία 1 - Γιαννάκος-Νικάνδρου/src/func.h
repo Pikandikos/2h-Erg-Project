@@ -27,8 +27,8 @@ using namespace boost::property_tree;
 using Kernel = CGAL::Simple_cartesian<double>;
 using Point_2 = Kernel::Point_2;
 using Polygon_2 = CGAL::Polygon_2<Kernel>;
+using Segment_2 = Kernel::Segment_2;
 
-// using DelTr = CGAL::Delaunay_triangulation_2<Kernel>; // Probably not needed
 using CDT = CGAL::Constrained_Delaunay_triangulation_2<Kernel>;
 
 // contstraint delaunay triangulation
@@ -53,10 +53,13 @@ bool attempt_to_flip(CDT &cdt, CDT::Finite_faces_iterator face_it, CDT::Edge edg
 
 // common.cpp
 double angle_between_points(const Point_2 &p1, const Point_2 &p2, const Point_2 &p3);
+bool is_obtuse_triangle(const Point_2 &p1, const Point_2 &p2, const Point_2 &p3);
 void check_cdt_validity(const CDT &cdt);
 bool is_point_inside_constraints(const Point_2 &point, const vector<pair<Point_2, Point_2>> &constraints);
 void analyze_obtuse_angles(const CDT &cdt);
 Point_2 mean_point_of_adjacent_triangles(CDT &cdt, CDT::Face_handle face, const vector<pair<Point_2, Point_2>> &constraints);
+Point_2 project_point_on_segment(const Point_2 &p, const Segment_2 &s);
+void ls_remove_case(std::vector<Point_2> &contender, int id);
 
 // io.c
 bool read_json_file(const string &file_path, string &instance_uid, vector<Point_2> &points, vector<int> &region_boundary, int &num_constraints, vector<pair<int, int>> &additional_constraints,
