@@ -22,6 +22,14 @@ double angle_between_points(const Point_2 &p1, const Point_2 &p2, const Point_2 
     return std::acos(dot_product / (magnitude_v1 * magnitude_v2)) * 180.0 / M_PI; // υπολογισμος γωνιας
 }
 
+bool is_obtuse_triangle(const Point_2 &p1, const Point_2 &p2, const Point_2 &p3)
+{
+    double angle1 = angle_between_points(p1, p2, p3);
+    double angle2 = angle_between_points(p2, p1, p3);
+    double angle3 = angle_between_points(p3, p1, p2);
+    return (angle1 > 90 || angle2 > 90 || angle3 > 90);
+}
+
 void check_cdt_validity(const CDT &cdt)
 {
     for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); ++fit)
@@ -103,39 +111,98 @@ void analyze_obtuse_angles(const CDT &cdt)
     cout << "Total obtuse angles found: " << obtuse_count << "\n";
 }
 
-// Point_2 compute_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it)
-// {
-//     std::vector<Point_2> neighbors_polygon;
+Point_2 mean_point_of_adjacent_triangles(CDT &cdt, CDT::Face_handle face, const vector<pair<Point_2, Point_2>> &constraints)
+{
+    std::vector<Point_2> centroids;
 
-//     // Iterate over neighboring faces and collect their vertices
-//     for (auto edge : cdt.finite_edges_of(face_it))
-//     {
-//         CDT::Face_iterator neighbor_face = edge.second; // Get neighboring face
-//         if (neighbor_face != face_it)
-//         {
-//             // Collect vertices that form the boundary of the polygon
-//             Point_2 neighbor_vertex = edge.first->get_opposite_vertex(face_it);
-//             neighbors_polygon.push_back(neighbor_vertex);
-//         }
-//     }
+    Point_2 mean(0, 0);
+    int count = 0;
 
-//     // Find a suitable Steiner point inside the polygon (e.g., centroid)
-//     Point_2 steiner_point = compute_centroid(neighbors_polygon);
+    for (int i = 0; i < 3; ++i)
+    {
+        CDT::Face_handle neighbour = face->neighbor(i);
+        if (cdt.is_infinite(neighbour))
+            continue;
 
-//     return steiner_point;
-// }
+        Point_2 p1 = neighbour->vertex(0)->point();
+        Point_2 p2 = neighbour->vertex(1)->point();
+        Point_2 p3 = neighbour->vertex(2)->point();
 
-// bool add_steiner_point_from_neighbors(CDT &cdt, CDT::Face_iterator face_it)
-// {
-//     // Get a Steiner point using the neighboring faces
-//     Point_2 steiner_point = compute_steiner_point_from_neighbors(cdt, face_it);
+        if (is_obtuse_triangle(p1, p2, p3))
+        {
+            centroids.push_back(CGAL::centroid(p1, p2, p3));
+        }
+    }
 
-//     // Check if the point is valid (e.g., inside the convex hull of neighbors)
-//     if (is_valid_steiner_point(cdt, steiner_point))
-//     {
-//         // Insert the Steiner point into the triangulation
-//         cdt.insert(steiner_point);
-//         return true;
-//     }
-//     return false;
-// }
+    if (!centroids.empty())
+    {
+        // Compute the centroid of the collected points
+        return CGAL::centroid(centroids.begin(), centroids.end());
+    }
+    else
+    {
+        // Fallback: return the first vertex point if no obtuse triangles are found
+        return face->vertex(0)->point();
+    }
+}
+
+Point_2 project_point_on_segment(const Point_2 &p, const Segment_2 &s)
+{
+    CGAL::Line_2<Kernel> line(s.source(), s.target());
+    return line.projection(p);
+}
+
+void ls_remove_case(std::vector<Point_2> &contender, int id)
+{
+    switch (id)
+    {
+    case 0: // Print and remove the circumcenter
+        if (!contender.empty())
+        {
+            Point_2 p = contender.back();
+            cout << "Circumcenter: (" << p.x() << ", " << p.y() << ")\n";
+            contender.pop_back();
+        }
+        break;
+
+    case 1: // Print and remove the midpoint
+        if (!contender.empty())
+        {
+            Point_2 p = contender.back();
+            cout << "Midpoint: (" << p.x() << ", " << p.y() << ")\n";
+            contender.pop_back();
+        }
+        break;
+
+    case 2: // Print and remove the projection
+        if (!contender.empty())
+        {
+            Point_2 p = contender.back();
+            cout << "Projection: (" << p.x() << ", " << p.y() << ")\n";
+            contender.pop_back();
+        }
+        break;
+
+    case 3: // Print and remove the centroid
+        if (!contender.empty())
+        {
+            Point_2 p = contender.back();
+            cout << "Centroid: (" << p.x() << ", " << p.y() << ")\n";
+            contender.pop_back();
+        }
+        break;
+
+    case 4: // Print and remove the mean point of adjacent triangles
+        if (!contender.empty())
+        {
+            Point_2 p = contender.back();
+            cout << "Mean Point: (" << p.x() << ", " << p.y() << ")\n";
+            contender.pop_back();
+        }
+        break;
+
+    default:
+        cout << "Invalid case ID!\n";
+        break;
+    }
+}
