@@ -34,10 +34,8 @@ bool read_json_file(const string &file_path, string &instance_uid, vector<Point_
         region_boundary.push_back(boundary.second.get_value<int>());
     }
 
-    // Updated handling of "additional_constraints" as array
     for (const auto &constraint : pt.get_child("additional_constraints"))
     {
-        num_constraints++;
         auto first = constraint.second.front().second.get_value<int>();
         auto second = constraint.second.back().second.get_value<int>();
         additional_constraints.emplace_back(first, second);
@@ -45,7 +43,19 @@ bool read_json_file(const string &file_path, string &instance_uid, vector<Point_
 
     num_constraints = pt.get<int>("num_constraints");
     method = pt.get<string>("method");
-    parameters = pt.get_child("parameters");
+
+    // Load parameters specific to the chosen method
+    string parameters_key = "parameters_" + method;
+    if (pt.find(parameters_key) != pt.not_found())
+    {
+        parameters = pt.get_child(parameters_key);
+    }
+    else
+    {
+        cerr << "Error: Parameters for method \"" << method << "\" not found in JSON file." << endl;
+        return false;
+    }
+
     delaunay = pt.get<bool>("delaunay");
 
     return true;

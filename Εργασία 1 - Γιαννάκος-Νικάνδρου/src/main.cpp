@@ -3,9 +3,7 @@
 
 int main()
 {
-    // string file_path = "test_instances/instance_test_8.json";
-    string file_path = "../input_2.json";
-    // string file_path = "../test_instances/instance_test_10.json";
+    string file_path = "../test_instances/instance_test_22_2.json";
     string instance_uid;
     int num__constraints = 0;
     vector<Point_2> points;
@@ -20,6 +18,7 @@ int main()
         cout << "Instance UID: " << instance_uid << endl;
         cout << "Method: " << method << endl;
         cout << "Delaunay: " << (delaunay ? "true" : "false") << endl;
+
         cout << "Points:" << endl;
         for (const auto &point : points)
         {
@@ -40,25 +39,25 @@ int main()
         }
         cout << "Num_constraints: " << num__constraints << endl;
 
-        cout << "Parameters:" << endl;
+        cout << "Parameters for " << method << ":" << endl;
         for (const auto &param : parameters)
         {
-            cout << param.first << ": " << param.second.data() << endl;
+            cout << "  " << param.first << ": " << param.second.data() << endl;
         }
     }
 
     cout << "Commencing Triangulation" << endl;
     CDT cdt;
-    cdt = triangulation(points, region_boundary, additional_constraints);
+
+    cdt = triangulation(points, region_boundary, additional_constraints, parameters);
+
     cout << "Went Well...." << endl;
 
-    // Analyze obtuse angles in the triangulation
     analyze_obtuse_angles(cdt);
 
     std::string filename = "../output.json"; // Specify your desired output filename
     create_json_output(cdt, filename);
 
-    // Visualize the triangulation
     export_to_svg(cdt, "output.svg");
 
     return 0;

@@ -152,57 +152,34 @@ Point_2 project_point_on_segment(const Point_2 &p, const Segment_2 &s)
     return line.projection(p);
 }
 
-void ls_remove_case(std::vector<Point_2> &contender, int id)
+// Function to check if a point already exists in the CDT
+bool point_exists_in_cdt(const Point_2 &point, const CDT &cdt)
 {
-    switch (id)
+    for (auto vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
     {
-    case 0: // Print and remove the circumcenter
-        if (!contender.empty())
+        if (vit->point() == point)
         {
-            Point_2 p = contender.back();
-            cout << "Circumcenter: (" << p.x() << ", " << p.y() << ")\n";
-            contender.pop_back();
+            return true; // Point exists
         }
-        break;
+    }
+    return false; // Point does not exist
+}
 
-    case 1: // Print and remove the midpoint
-        if (!contender.empty())
-        {
-            Point_2 p = contender.back();
-            cout << "Midpoint: (" << p.x() << ", " << p.y() << ")\n";
-            contender.pop_back();
-        }
-        break;
-
-    case 2: // Print and remove the projection
-        if (!contender.empty())
-        {
-            Point_2 p = contender.back();
-            cout << "Projection: (" << p.x() << ", " << p.y() << ")\n";
-            contender.pop_back();
-        }
-        break;
-
-    case 3: // Print and remove the centroid
-        if (!contender.empty())
-        {
-            Point_2 p = contender.back();
-            cout << "Centroid: (" << p.x() << ", " << p.y() << ")\n";
-            contender.pop_back();
-        }
-        break;
-
-    case 4: // Print and remove the mean point of adjacent triangles
-        if (!contender.empty())
-        {
-            Point_2 p = contender.back();
-            cout << "Mean Point: (" << p.x() << ", " << p.y() << ")\n";
-            contender.pop_back();
-        }
-        break;
-
+string get_steiner_point_method(int i)
+{
+    switch (i)
+    {
+    case 0:
+        return "Circumcenter";
+    case 1:
+        return "Midpoint";
+    case 2:
+        return "Projection";
+    case 3:
+        return "Centroid";
+    case 4:
+        return "Mean Point";
     default:
-        cout << "Invalid case ID!\n";
-        break;
+        return "Unknown Method"; // Fallback for invalid indices
     }
 }
