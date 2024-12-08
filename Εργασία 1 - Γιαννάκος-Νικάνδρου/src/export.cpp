@@ -60,7 +60,7 @@ void export_to_svg(const CDT &cdt, const std::string &filename)
             << "\" style=\"stroke:black;stroke-width:1\" />\n";
     }
 
-    // Draw vertices
+    // Draw vertices and coordinates
     for (CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); ++vit)
     {
         auto point = vit->point();
@@ -69,11 +69,29 @@ void export_to_svg(const CDT &cdt, const std::string &filename)
         double x = (point.x() - min_x) * scale;
         double y = (point.y() - min_y) * scale;
 
+        // Draw the vertex
         ofs << "<circle cx=\"" << x << "\" cy=\"" << height - y // Invert y-axis for SVG coordinate system
             << "\" r=\"3\" fill=\"red\" />\n";
+
+        // Determine the text position
+        double text_x = x + 5;          // Offset to the right
+        double text_y = height - y - 5; // Default offset upward
+
+        // If the point is too close to the top, adjust the label downward
+        if (y > height - 20)
+        {
+            text_y = height - y + 15; // Move downward
+        }
+
+        // Add text for the coordinates
+        ofs << "<text x=\"" << text_x << "\" y=\"" << text_y
+            << "\" font-size=\""
+            << std::max(10.0, scale * 2.0) // Scale font size proportionally
+            << "\" fill=\"yellow\">("
+            << point.x() << ", " << point.y() << ")</text>\n";
     }
 
     ofs << "</svg>\n";
     ofs.close();
-    std::cout << "Triangulation exported to " << filename << std::endl;
+    std::cout << "Triangulation exported to " << filename << " with visible coordinates." << std::endl;
 }
