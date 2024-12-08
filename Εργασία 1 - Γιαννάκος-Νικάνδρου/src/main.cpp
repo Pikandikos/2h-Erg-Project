@@ -3,7 +3,7 @@
 
 int main()
 {
-    string file_path = "../test_instances/instance_test_22_2.json";
+    string file_path = "../test_instances/instance_test_1_2.json";
     string instance_uid;
     int num__constraints = 0;
     vector<Point_2> points;
@@ -11,6 +11,7 @@ int main()
     vector<pair<int, int>> additional_constraints;
     string method;
     ptree parameters;
+    vector<double> method_parameters;
     bool delaunay;
 
     if (read_json_file(file_path, instance_uid, points, region_boundary, num__constraints, additional_constraints, method, parameters, delaunay))
@@ -46,19 +47,41 @@ int main()
         }
     }
 
+    populateVector(method, parameters, method_parameters);
+
     cout << "Commencing Triangulation" << endl;
     CDT cdt;
 
-    cdt = triangulation(points, region_boundary, additional_constraints, parameters);
+    cdt = initial_triangulation(points, region_boundary, additional_constraints, delaunay);
+
+    if (method == "local")
+    {
+        vector<Point_2> region_points = create_region_points(points, region_boundary);
+        local_search(cdt, region_points, method_parameters);
+    }
+    else if (method == "sa")
+    {
+        simulated_annealing(cdt, method_parameters);
+    }
+    else if (method == "ant")
+    {
+        // ant_colony(method_parameters, num_ants, possible_positions, cdt);
+        cout << "Not implemnted yet!!!" << endl;
+    }
+    else
+    {
+        cout << "Method not recognised..." << endl;
+    }
 
     cout << "Went Well...." << endl;
 
-    analyze_obtuse_angles(cdt);
+    cout << "Analyzing triangles for obtuse angles...\n";
+    cout << "Total obtuse angles found: " << analyze_obtuse_angles(cdt) << "\n";
 
     std::string filename = "../output.json"; // Specify your desired output filename
-    create_json_output(cdt, filename);
+    create_json_output(cdt, filename, instance_uid, analyze_obtuse_angles(cdt), method, method_parameters);
 
-    export_to_svg(cdt, "output.svg");
+    // export_to_svg(cdt, "output.svg");
 
     return 0;
 }

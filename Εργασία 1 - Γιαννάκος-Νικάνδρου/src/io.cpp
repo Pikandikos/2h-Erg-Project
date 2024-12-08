@@ -62,22 +62,30 @@ bool read_json_file(const string &file_path, string &instance_uid, vector<Point_
 }
 
 // Function to create JSON output from the CDT and save it to a file
-void create_json_output(const CDT &cdt, const std::string &filename)
+#include <sstream> // For stringstream
+void create_json_output(const CDT &cdt, const std::string &filename,
+                        std::string instance_uid,
+                        int obtuse_count, const std::string &method,
+                        const std::vector<double> &method_parameters)
 {
     using boost::property_tree::ptree;
     ptree json_output;
 
-    // Set static fields
+    // Static fields
     json_output.put("content_type", "CG_SHOP_2025_Solution");
-    json_output.put("instance_uid", "unique_instance_id");
+    json_output.put("instance_uid", instance_uid);
 
     // Create arrays for steiner_points_x and steiner_points_y
     ptree steiner_points_x, steiner_points_y;
     for (CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin(); vit != cdt.finite_vertices_end(); vit++)
     {
         ptree x, y;
-        x.put("", vit->point().x());
-        y.put("", vit->point().y());
+        std::stringstream ss_x, ss_y;
+        ss_x << vit->point().x();
+        ss_y << vit->point().y();
+
+        x.put("", ss_x.str());
+        y.put("", ss_y.str());
 
         steiner_points_x.push_back(std::make_pair("", x));
         steiner_points_y.push_back(std::make_pair("", y));
@@ -90,30 +98,50 @@ void create_json_output(const CDT &cdt, const std::string &filename)
     ptree edges;
     for (CDT::Finite_edges_iterator edge_it = cdt.finite_edges_begin(); edge_it != cdt.finite_edges_end(); edge_it++)
     {
-        ptree edge_array;
-
-        // CDT::Edge e1 = edges.first->vertex(cdt.ccw(edge_it->second)); // First vertex of the edge
-        // CDT::Edge e2 = edges.first->vertex(cdt.cw(edge_it->second));  // Second vertex of the edge
-        // edge_array.push_back(std::make_pair("", )); // Assume 'info' provides a unique index
-        // edge_array.push_back(std::make_pair("", ));
-
-        // Get the vertices of the edge
         CDT::Vertex_handle v1 = edge_it->first->vertex(cdt.ccw(edge_it->second));
         CDT::Vertex_handle v2 = edge_it->first->vertex(cdt.cw(edge_it->second));
 
-        // Access the points of the vertices
-        Point_2 p1 = v1->point(); // Get the point of the first vertex
-        Point_2 p2 = v2->point(); // Get the point of the second vertex
-
-        // Store vertex coordinates in the edge array
-        edge_array.put("vertex1.x", p1.x());
-        edge_array.put("vertex1.y", p1.y());
-        edge_array.put("vertex2.x", p2.x());
-        edge_array.put("vertex2.y", p2.y());
-
-        edges.push_back(std::make_pair("", edge_array));
+        ptree edge;
+        edge.push_back(std::make_pair("", ptree(std::to_string(v1->point().x()))));
+        edge.push_back(std::make_pair("", ptree(std::to_string(v2->point().x()))));
+        edges.push_back(std::make_pair("", edge));
     }
     json_output.add_child("edges", edges);
+
+    // Add obtuse_count
+    json_output.put("obtuse_count", obtuse_count);
+
+    // Add method
+    json_output.put("method", method);
+
+    // Add parameters based on the method
+    ptree params;
+    if (method == "local" && method_parameters.size() == 1)
+    {
+        params.put("L", method_parameters[0]);
+    }
+    else if (method == "sa" && method_parameters.size() == 3)
+    {
+        params.put("alpha", method_parameters[0]);
+        params.put("beta", method_parameters[1]);
+        params.put("L", method_parameters[2]);
+    }
+    else if (method == "ant" && method_parameters.size() == 7)
+    {
+        params.put("alpha", method_parameters[0]);
+        params.put("beta", method_parameters[1]);
+        params.put("xi", method_parameters[2]);
+        params.put("psi", method_parameters[3]);
+        params.put("lambda", method_parameters[4]);
+        params.put("kappa", method_parameters[5]);
+        params.put("L", method_parameters[6]);
+    }
+    else
+    {
+        std::cerr << "Error: Incorrect number of parameters for the method " << method << std::endl;
+        return;
+    }
+    json_output.add_child("parameters", params);
 
     // Write JSON output to a file
     std::ofstream output_file(filename);

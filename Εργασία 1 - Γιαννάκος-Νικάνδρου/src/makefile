@@ -3,7 +3,7 @@ CXX = g++
 # Define the target executable
 TARGET = main
 # Define source files
-SRCS = main.cpp func.cpp io.cpp common.cpp export.cpp
+SRCS = main.cpp func.cpp io.cpp common.cpp export.cpp local_search.cpp simulated_annealing.cpp
 # Object directory
 OBJDIR = ../build
 # Define object files
