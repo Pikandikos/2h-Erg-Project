@@ -43,49 +43,74 @@ void check_cdt_validity(const CDT &cdt)
     return;
 }
 
-bool is_point_inside_constraints(const Point_2 &point, const std::vector<std::pair<Point_2, Point_2>> &constraints)
+bool is_point_inside_constraints(const Point_2 &point, const std::vector<Point_2> &region_points)
 {
-    // Create a set of unique points from the constraints (ensures no duplicate points)
-    std::set<Point_2> unique_points;
-    for (const auto &constraint : constraints)
+    Polygon_2 region_polygon(region_points.begin(), region_points.end());
+
+    // Check the bounded side
+    CGAL::Bounded_side side = region_polygon.bounded_side(point);
+
+    // ON_BOUNDED_SIDE: Point is inside the polygon
+    // ON_BOUNDARY: The point is exactly on one of the edges or vertices of the polygon
+    return (side == CGAL::ON_BOUNDED_SIDE || side == CGAL::ON_BOUNDARY);
+}
+
+void insert_points_into_cdt(vector<Point_2> &points, vector<int> &region_boundary, const vector<pair<int, int>> &additional_constraints, CDT &cdt)
+{
+    // Vector to store points in the region boundary
+    vector<Point_2> region_points;
+
+    // Insert all points into the CDT
+    for (const auto &point : points)
     {
-        unique_points.insert(constraint.first);
-        unique_points.insert(constraint.second);
+        cdt.insert(point);
+    }
+    cout << "Points inserted into CDT" << endl;
+
+    // Add region boundary as constraints
+    cout << "Adding region boundary constraints..." << endl;
+    for (size_t i = 0; i < region_boundary.size(); ++i)
+    {
+        int start_idx = region_boundary[i];
+        // Wrap around for the last edge
+        int end_idx = region_boundary[(i + 1) % region_boundary.size()];
+        cdt.insert_constraint(points[start_idx], points[end_idx]);
     }
 
-    // If there are not enough points to form a polygon, return false (degenerate case)
-    if (unique_points.size() < 3)
+    // Add additional constraints
+    cout << "Adding additional constraints..." << endl;
+    for (const auto &constraint : additional_constraints)
     {
-        std::cerr << "Constraints form a degenerate polygon (less than 3 unique points)." << std::endl;
-        return false;
+        int start_idx = constraint.first;
+        int end_idx = constraint.second;
+        cdt.insert_constraint(points[start_idx], points[end_idx]);
     }
 
-    // Create a vector of the unique points to form the polygon
-    std::vector<Point_2> polygon_points(unique_points.begin(), unique_points.end());
+    cout << "Constraints added successfully" << endl;
+}
 
-    // Check for degenerate cases where points might be collinear
-    // We will check if the points form a valid simple polygon
-    Polygon_2 constraint_polygon(polygon_points.begin(), polygon_points.end());
+vector<Point_2> create_region_points(vector<Point_2> &points, vector<int> &region_boundary)
+{
+    // Vector to store points in the region boundary
+    vector<Point_2> region_points;
 
-    // Ensure the polygon is simple (non-self-intersecting)
-    if (!constraint_polygon.is_simple())
+    for (size_t i = 0; i < region_boundary.size(); ++i)
     {
-        std::cerr << "Constraints form a non-simple polygon!" << std::endl;
-        return false;
+        int idx = region_boundary[i];
+        // Ensure unique points are added to the region_points vector
+        if (region_points.empty() || region_points.back() != points[idx])
+        {
+            region_points.push_back(points[idx]);
+        }
     }
-
-    // Check if the point lies inside the polygon
-    return constraint_polygon.bounded_side(point) != CGAL::ON_UNBOUNDED_SIDE;
+    return region_points;
 }
 
 #include <tuple>
-
 // Function to find and print obtuse angles in the CDT
-void analyze_obtuse_angles(const CDT &cdt)
+int analyze_obtuse_angles(const CDT &cdt)
 {
     int obtuse_count = 0; // Counter for obtuse angles
-
-    cout << "Analyzing triangles for obtuse angles...\n";
 
     for (CDT::Finite_faces_iterator face_it = cdt.finite_faces_begin(); face_it != cdt.finite_faces_end(); ++face_it)
     {
@@ -108,10 +133,10 @@ void analyze_obtuse_angles(const CDT &cdt)
             // cout << "  Angles: " << angle1 << "°, " << angle2 << "°, " << angle3 << "°\n";
         }
     }
-    cout << "Total obtuse angles found: " << obtuse_count << "\n";
+    return obtuse_count;
 }
 
-Point_2 mean_point_of_adjacent_triangles(CDT &cdt, CDT::Face_handle face, const vector<pair<Point_2, Point_2>> &constraints)
+Point_2 mean_point_of_adjacent_triangles(CDT &cdt, CDT::Face_handle face, const std::vector<Point_2> &region_points)
 {
     std::vector<Point_2> centroids;
 
@@ -181,5 +206,27 @@ string get_steiner_point_method(int i)
         return "Mean Point";
     default:
         return "Unknown Method"; // Fallback for invalid indices
+    }
+}
+
+void populateVector(const std::string &method, const boost::property_tree::ptree &parameters, std::vector<double> &params)
+{
+    params.clear(); // Clear the vector before populating
+
+    std::cout << "Parameters for " << method << ":" << std::endl;
+
+    // Iterate over the parameters and store the values in the vector
+    for (const auto &param : parameters)
+    {
+        try
+        {
+            // Convert the value to double and add to the vector
+            params.push_back(std::stod(param.second.data()));
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Error converting parameter \"" << param.first
+                      << "\" to double: " << e.what() << std::endl;
+        }
     }
 }

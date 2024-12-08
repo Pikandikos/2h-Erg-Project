@@ -1,0 +1,46 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="305.19" height="500">
+<line x1="10.8997" y1="500" x2="125.26" y2="438.754" style="stroke:black;stroke-width:1" />
+<line x1="125.26" y1="438.754" x2="5.36332" y2="269.723" style="stroke:black;stroke-width:1" />
+<line x1="5.36332" y1="269.723" x2="10.8997" y2="500" style="stroke:black;stroke-width:1" />
+<line x1="125.26" y1="438.754" x2="35.4671" y2="264.36" style="stroke:black;stroke-width:1" />
+<line x1="35.4671" y1="264.36" x2="5.36332" y2="269.723" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="181.142" x2="250.692" y2="0" style="stroke:black;stroke-width:1" />
+<line x1="10.8997" y1="500" x2="0" y2="181.142" style="stroke:black;stroke-width:1" />
+<line x1="290.138" y1="470.069" x2="10.8997" y2="500" style="stroke:black;stroke-width:1" />
+<line x1="250.692" y1="0" x2="157.958" y2="243.945" style="stroke:black;stroke-width:1" />
+<line x1="157.958" y1="243.945" x2="305.19" y2="36.8512" style="stroke:black;stroke-width:1" />
+<line x1="305.19" y1="36.8512" x2="250.692" y2="0" style="stroke:black;stroke-width:1" />
+<line x1="5.36332" y1="269.723" x2="0" y2="181.142" style="stroke:black;stroke-width:1" />
+<line x1="305.19" y1="36.8512" x2="290.138" y2="470.069" style="stroke:black;stroke-width:1" />
+<line x1="290.138" y1="470.069" x2="125.26" y2="438.754" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="181.142" x2="157.958" y2="243.945" style="stroke:black;stroke-width:1" />
+<line x1="290.138" y1="438.754" x2="290.138" y2="470.069" style="stroke:black;stroke-width:1" />
+<line x1="305.19" y1="36.8512" x2="290.138" y2="438.754" style="stroke:black;stroke-width:1" />
+<line x1="157.958" y1="243.945" x2="290.138" y2="438.754" style="stroke:black;stroke-width:1" />
+<line x1="35.4671" y1="264.36" x2="157.958" y2="243.945" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="181.142" x2="35.4671" y2="264.36" style="stroke:black;stroke-width:1" />
+<line x1="290.138" y1="470.069" x2="35.4671" y2="264.36" style="stroke:black;stroke-width:1" />
+<line x1="35.4671" y1="264.36" x2="290.138" y2="438.754" style="stroke:black;stroke-width:1" />
+<circle cx="305.19" cy="36.8512" r="3" fill="red" />
+<text x="310.19" y="31.8512" font-size="10" fill="yellow">(2402, 2819)</text>
+<circle cx="10.8997" cy="500" r="3" fill="red" />
+<text x="15.8997" y="495" font-size="10" fill="yellow">(701, 142)</text>
+<circle cx="157.958" cy="243.945" r="3" fill="red" />
+<text x="162.958" y="238.945" font-size="10" fill="yellow">(1551, 1622)</text>
+<circle cx="0" cy="181.142" r="3" fill="red" />
+<text x="5" y="176.142" font-size="10" fill="yellow">(638, 1985)</text>
+<circle cx="125.26" cy="438.754" r="3" fill="red" />
+<text x="130.26" y="433.754" font-size="10" fill="yellow">(1362, 496)</text>
+<circle cx="5.36332" cy="269.723" r="3" fill="red" />
+<text x="10.3633" y="264.723" font-size="10" fill="yellow">(669, 1473)</text>
+<circle cx="290.138" cy="470.069" r="3" fill="red" />
+<text x="295.138" y="465.069" font-size="10" fill="yellow">(2315, 315)</text>
+<circle cx="250.692" cy="0" r="3" fill="red" />
+<text x="255.692" y="15" font-size="10" fill="yellow">(2087, 3032)</text>
+<circle cx="290.138" cy="438.754" r="3" fill="red" />
+<text x="295.138" y="433.754" font-size="10" fill="yellow">(2315, 496)</text>
+<circle cx="35.4671" cy="264.36" r="3" fill="red" />
+<text x="40.4671" y="259.36" font-size="10" fill="yellow">(843, 1504)</text>
+</svg>
