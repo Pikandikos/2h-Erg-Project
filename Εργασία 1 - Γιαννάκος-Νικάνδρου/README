@@ -1,0 +1,47 @@
+Στην παρούσα εργασία δουλεψαμε εξ αποστάσεως και ασύχρονα. 
+Λόγω των καθημερινών μας προγραμμάτων μπορούσαμε να υλοποιούμε ένα μέρος της εργασίας. 
+Αυτη την φορα ανεβάζαμε στο github to μέρος της εργασίας που δουλέβαμε (https://github.com/DimitrisGK/project_emiris.git).
+
+Ο Νικόλας δούλεψε στο νέο version της read_json_file και create_json_output.
+Έγινε αλλαγη των συναρτήσεων για να ικανοποιούν τις αναγκες τις 2ης Εργασίας. (io.cpp)
+
+Έπίσης άλλαξε την main για να ικανοποιεί τις αναγκες τις 2ης Εργασίας πιο συγκεκριμένα,
+για να υποστιρίζεται η παράμετρος delaunay. Στην περιπτωση που δεν ειναι true έχει μπεί συνθήκη
+στην αρχίκη τριγονοποίηση για πρωορω return. Απο εκεί και μετα ανάλογα με το method επιλέγετε
+η καταλληλη function. Ο Νικόλας υλοποιησε το local_search και μαζί τις: create_region_points,
+add_steiner_point_local_search, is_obtuse_triangle, is_point_inside_constraints, insert_points_into_cdt,
+analyze_obtuse_angles, mean_point_of_adjacent_triangles, project_point_on_segment,
+populateVector, is_circumcenter_inside_neighbor_triangle
+
+Πολλές απο αυτές χρησιμοποιούνται και για άλλες χρησεις.
+
+create_region_points: Βάζει όλα τα σημεια του region_boundary σε ένα πινακα που χρησιμοποιείτε κυρίως στο
+    insert_points_into_cdt και στο is_point_inside_constraints.
+insert_points_into_cdt: Βάζει όλα τα σημεια στο cdt μαζεί με τα additional_constraints και το region_boundary
+is_point_inside_constraints: Ελέγχει αν τα σημεία ειναι μέσα στα region boundary constraints.
+add_steiner_point_local_search: Μετά απο μερικούς validation ελέγχους, υπολογίζεται το steiner point 
+    χρησιμοποιόντας τους 5 τροπουςγια να υπολογιστούν τα steiner points (circumcenter, midpoint, projection,
+    centroid, mean of adjacent triangles) ξαναγίνονται ελέγχοι. Μέτα υπολογίζεται το penalty score κάθε σημείου,
+    που βασίζεται σε διάφορους παράγοντες όπως: αριθμός των αμβλύγωνων τριγώνων, μέγιστη γωνία των τριγώνων, 
+    συνολικό άθροισμα των αμβλύγωνων γωνιών.
+    Έτσι καθορίζεται ποιο σημείο Steiner είναι το καλύτερο.
+   Αν δεν υπάρχει κανένα έγκυρο υποψήφιο σημείο, η συνάρτηση επιστρέφει `false`.
+
+local_search: Ελέγχεται κάθε τρίγωνο στην τριγωνοποίηση, υπολογίζονται οι γωνίες του τριγώνου, αν βρεθεί
+	αμβλύγωνο, καλείται η συνάρτηση add_steiner_point_local_search για να προσθέσει Steiner point.
+	Αν μετά την προσθήκη Steiner point, τα αμβλύγωνια τριγώνα αυξηθούν γίνετε διακόπει, διακοπ΄μπορεί να
+	γινεί επίσης όταν τα αμβλύγωνια τριγώνα είναι 0 ή όταν το counter φτάσει το L
+	
+is_obtuse_triangle: Ελέγχεται αν ένα τρίγωνο είναι αμβλυγώνιο
+analyze_obtuse_angles: Μετρά πόσα Τρίγωνα/Γωνίες είναι αμβλύγωνια.
+mean_point_of_adjacent_triangles(Αλγόριθμος που ζητείται): Βρίσκει και επιστρέφει το Steiner point
+	βάση του μέσου όρου των υπόλοιπων/γειτωνικών Τρίγωνων.
+project_point_on_segment(Αλγόριθμος που ζητείται): Βρίσκει και επιστρέφει το Steiner point
+	βάση της προβολή του τρίτου σημείου στην ευθεία που ενώνει τις δύο κορυφές.
+populateVector: Γεμίζει τον πίνακα με τις παραμέτρους που διαβάζει απο το input json file.
+
+Ο Δημητρης δουλέψε την υλοποιηση του simulated_annealing στηριζεται στις υλοποιησεις των calculate_energy και generate_random_steiner_point.
+Η calculate_energy υπολογιζει την ενεργεια με βαση τις διαφανειες του μαθήματος. 
+Η  generate_random_steiner_point δημιουργει τυχαια ενα σημειο steiner σε ενα τριγωνο (βαση τριων γωνιων του). 
+Τελος στη simulated_annealing πορσπαθησα να ακολουθησω οσο περισσοτερο μπορουσα τον ψευδοκωδικα των διαφανειων, 
+και με την βοηθεια των δυο προηγουμενων συναρτησεων να τον υλοποιησω.
