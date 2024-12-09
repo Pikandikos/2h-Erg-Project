@@ -91,7 +91,7 @@ bool add_steiner_point_local_search(CDT &cdt, const CDT::Edge &edge, const std::
             std::cout << "Circumcenter inside neighboring triangle, constraint removed, and Steiner point inserted." << std::endl;
         }
         ct.copy_cdt.insert(candidate_points[i]);
-        // export_to_svg(ct.copy_cdt, "output.svg");
+        export_to_svg(ct.copy_cdt, "output.svg");
 
         if (!check_cdt_validity(ct.copy_cdt))
         {

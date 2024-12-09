@@ -74,7 +74,7 @@ void local_search(CDT &cdt, const std::vector<Point_2> &region_points, std::vect
 bool add_steiner_point_local_search(CDT &cdt, const CDT::Edge &edge, const std::vector<Point_2> &region_points);
 
 // simulated_annealing.cpp
-void simulated_annealing(const CDT &cdt, int max_iterations);
+void simulated_annealing(CDT &cdt, const std::vector<Point_2> &region_points, std::vector<double> method_parameters);
 double calculate_energy(const CDT &cdt, std::vector<double> method_parameters);
 Point_2 generate_random_steiner_point(const Point_2 &a, const Point_2 &b, const Point_2 &c, std::mt19937 &gen, std::uniform_int_distribution<int> &dist);
 

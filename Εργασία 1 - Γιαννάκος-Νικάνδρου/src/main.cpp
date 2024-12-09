@@ -3,7 +3,7 @@
 
 int main()
 {
-    string file_path = "../test_instances/instance_test_1_2.json";
+    string file_path = "../test_instances/instance_test_7_2.json";
     string instance_uid;
     int num__constraints = 0;
     vector<Point_2> points;
@@ -53,15 +53,15 @@ int main()
     CDT cdt;
 
     cdt = initial_triangulation(points, region_boundary, additional_constraints, delaunay);
+    vector<Point_2> region_points = create_region_points(points, region_boundary);
 
     if (method == "local")
     {
-        vector<Point_2> region_points = create_region_points(points, region_boundary);
         local_search(cdt, region_points, method_parameters);
     }
     else if (method == "sa")
     {
-        simulated_annealing(cdt, method_parameters);
+        simulated_annealing(cdt, region_points, method_parameters);
     }
     else if (method == "ant")
     {
