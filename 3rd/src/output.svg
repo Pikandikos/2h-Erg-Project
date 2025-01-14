@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="500" height="166.667">
+<line x1="333.333" y1="41.6667" x2="500" y2="166.667" style="stroke:black;stroke-width:1" />
+<line x1="333.333" y1="41.6667" x2="333.333" y2="140.625" style="stroke:black;stroke-width:1" />
+<line x1="333.333" y1="140.625" x2="500" y2="166.667" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="166.667" x2="98.9583" y2="119.792" style="stroke:black;stroke-width:1" />
+<line x1="98.9583" y1="119.792" x2="0" y2="0" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="0" x2="0" y2="166.667" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="166.667" x2="500" y2="166.667" style="stroke:black;stroke-width:1" />
+<line x1="333.333" y1="140.625" x2="0" y2="166.667" style="stroke:black;stroke-width:1" />
+<line x1="208.333" y1="0" x2="333.333" y2="41.6667" style="stroke:black;stroke-width:1" />
+<line x1="0" y1="0" x2="208.333" y2="0" style="stroke:black;stroke-width:1" />
+<line x1="98.9583" y1="119.792" x2="333.333" y2="140.625" style="stroke:black;stroke-width:1" />
+<line x1="333.333" y1="140.625" x2="208.333" y2="0" style="stroke:black;stroke-width:1" />
+<line x1="208.333" y1="0" x2="98.9583" y2="119.792" style="stroke:black;stroke-width:1" />
+<circle cx="0" cy="166.667" r="2" fill="red" />
+<text x="5" y="161.667" font-size="12" fill="yellow">(192, 512)</text>
+<circle cx="500" cy="166.667" r="2" fill="red" />
+<text x="505" y="161.667" font-size="12" fill="yellow">(384, 512)</text>
+<circle cx="333.333" cy="41.6667" r="2" fill="red" />
+<text x="338.333" y="36.6667" font-size="12" fill="yellow">(320, 560)</text>
+<circle cx="208.333" cy="0" r="2" fill="red" />
+<text x="213.333" y="15" font-size="12" fill="yellow">(272, 576)</text>
+<circle cx="0" cy="0" r="2" fill="red" />
+<text x="5" y="15" font-size="12" fill="yellow">(192, 576)</text>
+<circle cx="98.9583" cy="119.792" r="2" fill="red" />
+<text x="103.958" y="114.792" font-size="12" fill="yellow">(230, 530)</text>
+<circle cx="333.333" cy="140.625" r="2" fill="red" />
+<text x="338.333" y="135.625" font-size="12" fill="yellow">(320, 522)</text>
+</svg>
